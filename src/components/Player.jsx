@@ -6,18 +6,19 @@ export default function Player({ name, symbol, isActive, updateName }) {
   const inputRef = useRef(null);
 
   console.log('Entering function Player ' + name);
+
   useEffect(() => {
-    console.log('useEffect name, !isEditing')
-    if (!isEditing && newName !== name) {
-        console.log('Updating newName to match name');
-        setNewName(name);
+    console.log('useEffect name, !isEditing');
+    if (!isEditing) {
+      console.log('Updating newName to match name');
+      setNewName(name);
     }
   }, [name, isEditing]);
 
   useEffect(() => {
     console.log('useEffect isEditing');
     if (isEditing && inputRef.current) {
-        console.log('Focusing input');
+      console.log('Focusing input');
       inputRef.current.focus();
     }
   }, [isEditing]);
@@ -50,24 +51,23 @@ export default function Player({ name, symbol, isActive, updateName }) {
   if (!isEditing) {
     console.log('Rendering Edit span element');
   }
-  let editablePlayerName = <span className="player-name">{name}</span>;
-  if (isEditing) {
-    editablePlayerName = (
-      <input
-        type="text"
-        value={newName}
-        required
-        onChange={handleChange}
-        ref={inputRef}
-        onKeyDown={handleKeyDown}
-      />
-    );
-  }
-  console.log('rendering player')
+
+  console.log('rendering player');
   return (
     <li className={isActive ? "active" : undefined}>
       <span className="player">
-        {editablePlayerName}
+        {isEditing ? (
+          <input
+            type="text"
+            value={newName}
+            required
+            onChange={handleChange}
+            ref={inputRef}
+            onKeyDown={handleKeyDown}
+          />
+        ) : (
+          <span className="player-name">{name}</span>
+        )}
         <span className="player-symbol">{symbol}</span>
       </span>
       <button onClick={handleEditClick}>{btnCaption}</button>
